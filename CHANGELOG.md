@@ -22,3 +22,10 @@ section here, and uses the same content as the GitHub Release body.
 -->
 
 ## [Unreleased]
+
+## [v0.1.0] - 2026-07-01
+
+### Highlights
+
+Initial release of cogrind-workshop, a human-facing MCP client for a running cobalt-grinding daemon, providing one-shot `ingest`, `ask`, and `search` subcommands alongside an interactive chat REPL. Distributed under AGPL-3.0-or-later with a commercial option documented in LICENSING.md.
+
