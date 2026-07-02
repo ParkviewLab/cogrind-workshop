@@ -223,7 +223,15 @@ def test_cli_query_calls_wiki_search():
 
 def test_cli_query_passes_top_k_and_expand_hops():
     runner = CliRunner()
-    canned = {"query": "x", "hits": [], "expansion_edges": [], "expanded_node_ids": [], "gap_detected": True, "truncated_expansion": False, "count": 0}
+    canned = {
+        "query": "x",
+        "hits": [],
+        "expansion_edges": [],
+        "expanded_node_ids": [],
+        "gap_detected": True,
+        "truncated_expansion": False,
+        "count": 0,
+    }
     with patch.object(main, "call_tool", return_value=canned) as ct:
         runner.invoke(main.main, ["--query", "x", "--top-k", "20", "--expand-hops", "2"])
     args = ct.call_args.args[1]
@@ -233,7 +241,15 @@ def test_cli_query_passes_top_k_and_expand_hops():
 
 def test_cli_query_renders_gap_when_no_hits():
     runner = CliRunner()
-    canned = {"query": "nothing-matches", "hits": [], "expansion_edges": [], "expanded_node_ids": [], "gap_detected": True, "truncated_expansion": False, "count": 0}
+    canned = {
+        "query": "nothing-matches",
+        "hits": [],
+        "expansion_edges": [],
+        "expanded_node_ids": [],
+        "gap_detected": True,
+        "truncated_expansion": False,
+        "count": 0,
+    }
     with patch.object(main, "call_tool", return_value=canned):
         result = runner.invoke(main.main, ["--query", "nothing-matches"])
     assert result.exit_code == 0
@@ -249,7 +265,14 @@ def test_cli_ask_calls_wiki_ask_and_renders_citations():
         "citations": [{"page_id": "concept-mcp__1", "valid": True}],
         "invalid_citations": [],
         "hits_used": [
-            {"id": "concept-mcp__1", "title": "MCP", "type": "concept", "score": 1.0, "snippet": "", "aliases": []}
+            {
+                "id": "concept-mcp__1",
+                "title": "MCP",
+                "type": "concept",
+                "score": 1.0,
+                "snippet": "",
+                "aliases": [],
+            }
         ],
         "gap_detected": False,
         "truncated_context": False,
@@ -287,7 +310,12 @@ def test_cli_find_gaps_lists_gaps():
     runner = CliRunner()
     canned = {
         "gaps": [
-            {"id": "abc12345", "query": "what is foo", "created_at": "2026-05-18T00:00:00Z", "why": "user asked"},
+            {
+                "id": "abc12345",
+                "query": "what is foo",
+                "created_at": "2026-05-18T00:00:00Z",
+                "why": "user asked",
+            },
         ]
     }
     with patch.object(main, "call_tool", return_value=canned) as ct:
