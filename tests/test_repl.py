@@ -214,11 +214,7 @@ def test_report_gap_usage_error() -> None:
 
 def test_gaps_renders_list() -> None:
     console, buf = _make_console()
-    canned = {
-        "gaps": [
-            {"id": "abc12345", "query": "what is foo", "created_at": "2026-05-18T00:00:00Z"}
-        ]
-    }
+    canned = {"gaps": [{"id": "abc12345", "query": "what is foo", "created_at": "2026-05-18T00:00:00Z"}]}
     with patch.object(repl, "call_tool", return_value=canned):
         repl._cmd_gaps("", "h", 1, console, [])
     assert "abc12345" in buf.getvalue()
@@ -263,9 +259,7 @@ def test_safe_call_tool_returns_none_on_daemon_unreachable() -> None:
     becomes a printed error + None return (loop continues instead of
     crashing out)."""
     console, buf = _make_console()
-    with patch.object(
-        repl, "call_tool", side_effect=repl.DaemonUnreachable("cobalt-grinding down")
-    ):
+    with patch.object(repl, "call_tool", side_effect=repl.DaemonUnreachable("cobalt-grinding down")):
         out = repl._safe_call_tool(console, "wiki.status", host="h", port=1)
     assert out is None
     assert "cobalt-grinding down" in buf.getvalue()

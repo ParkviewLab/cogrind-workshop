@@ -297,9 +297,7 @@ def _do_ingest(host: str, port: int, path: str) -> None:
     formatters.format_ingest_result(result, console)
 
 
-def _do_query(
-    host: str, port: int, query: str, *, top_k: int | None, expand_hops: int | None
-) -> None:
+def _do_query(host: str, port: int, query: str, *, top_k: int | None, expand_hops: int | None) -> None:
     args: dict[str, Any] = {"query": query}
     if top_k is not None:
         args["top_k"] = top_k
@@ -312,9 +310,7 @@ def _do_query(
     formatters.format_search_result(result, console)
 
 
-def _do_ask(
-    host: str, port: int, question: str, *, top_k: int | None, expand_hops: int | None
-) -> None:
+def _do_ask(host: str, port: int, question: str, *, top_k: int | None, expand_hops: int | None) -> None:
     args: dict[str, Any] = {"question": question}
     if top_k is not None:
         args["top_k"] = top_k
