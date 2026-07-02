@@ -35,9 +35,7 @@ def format_status(status: dict[str, Any], console: Console) -> None:
     table.add_row("lance tables", ", ".join(status.get("lance_tables", []) or []))
 
     embed = status.get("embedding", {}) or {}
-    table.add_row(
-        "embedding", f"{embed.get('provider')}:{embed.get('model')} (dim={embed.get('dim')})"
-    )
+    table.add_row("embedding", f"{embed.get('provider')}:{embed.get('model')} (dim={embed.get('dim')})")
 
     mutex = status.get("corpus_mutex", {}) or {}
     if mutex.get("locked"):
@@ -204,7 +202,7 @@ def format_ask_result(result: dict[str, Any], console: Console) -> None:
     if result.get("gap_detected"):
         console.print(
             "[yellow]gap_detected[/yellow] — the corpus didn't help. "
-            "Consider `cogrind-workshop --report-gap \"...\"` to flag it for Research."
+            'Consider `cogrind-workshop --report-gap "..."` to flag it for Research.'
         )
     if result.get("truncated_context"):
         console.print("[dim](some page bodies were truncated for the LLM context)[/dim]")

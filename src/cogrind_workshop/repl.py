@@ -70,30 +70,22 @@ def _help_text() -> str:
 # ---- slash command handlers ----
 
 
-def _cmd_quit(
-    _args: str, _host: str, _port: int, console: Console, _log: list[dict[str, str]]
-) -> bool:
+def _cmd_quit(_args: str, _host: str, _port: int, console: Console, _log: list[dict[str, str]]) -> bool:
     console.print("[dim]bye[/dim]")
     return True
 
 
-def _cmd_help(
-    _args: str, _host: str, _port: int, console: Console, _log: list[dict[str, str]]
-) -> bool:
+def _cmd_help(_args: str, _host: str, _port: int, console: Console, _log: list[dict[str, str]]) -> bool:
     console.print(_help_text())
     return False
 
 
-def _cmd_clear(
-    _args: str, _host: str, _port: int, console: Console, _log: list[dict[str, str]]
-) -> bool:
+def _cmd_clear(_args: str, _host: str, _port: int, console: Console, _log: list[dict[str, str]]) -> bool:
     console.clear()
     return False
 
 
-def _cmd_history(
-    _args: str, _host: str, _port: int, console: Console, log: list[dict[str, str]]
-) -> bool:
+def _cmd_history(_args: str, _host: str, _port: int, console: Console, log: list[dict[str, str]]) -> bool:
     """Show this session's user questions. Filters the multi-turn
     message log to just the user-role entries."""
     questions = [m.get("content", "") for m in log if m.get("role") == "user"]
@@ -105,9 +97,7 @@ def _cmd_history(
     return False
 
 
-def _cmd_reset(
-    _args: str, _host: str, _port: int, console: Console, log: list[dict[str, str]]
-) -> bool:
+def _cmd_reset(_args: str, _host: str, _port: int, console: Console, log: list[dict[str, str]]) -> bool:
     """Clear the multi-turn conversation history without exiting.
 
     Useful when you're switching topics and don't want the next
@@ -123,9 +113,7 @@ def _cmd_reset(
     return False
 
 
-def _cmd_status(
-    _args: str, host: str, port: int, console: Console, _log: list[dict[str, str]]
-) -> bool:
+def _cmd_status(_args: str, host: str, port: int, console: Console, _log: list[dict[str, str]]) -> bool:
     result = _safe_call_tool(console, "wiki.status", host=host, port=port)
     if result is None:
         return False
@@ -136,16 +124,12 @@ def _cmd_status(
     return False
 
 
-def _cmd_search(
-    args: str, host: str, port: int, console: Console, _log: list[dict[str, str]]
-) -> bool:
+def _cmd_search(args: str, host: str, port: int, console: Console, _log: list[dict[str, str]]) -> bool:
     query = args.strip()
     if not query:
         console.print("[red]usage[/red]: /search <query>")
         return False
-    result = _safe_call_tool(
-        console, "wiki.search", {"query": query}, host=host, port=port
-    )
+    result = _safe_call_tool(console, "wiki.search", {"query": query}, host=host, port=port)
     if result is None:
         return False
     if not isinstance(result, dict):
@@ -155,16 +139,12 @@ def _cmd_search(
     return False
 
 
-def _cmd_page(
-    args: str, host: str, port: int, console: Console, _log: list[dict[str, str]]
-) -> bool:
+def _cmd_page(args: str, host: str, port: int, console: Console, _log: list[dict[str, str]]) -> bool:
     page_id = args.strip()
     if not page_id:
         console.print("[red]usage[/red]: /page <id>")
         return False
-    result = _safe_call_tool(
-        console, "wiki.get_page", {"page_id": page_id}, host=host, port=port
-    )
+    result = _safe_call_tool(console, "wiki.get_page", {"page_id": page_id}, host=host, port=port)
     if result is None:
         return False
     if isinstance(result, dict) and "error" in result:
@@ -181,9 +161,7 @@ def _cmd_page(
     return False
 
 
-def _cmd_gaps(
-    _args: str, host: str, port: int, console: Console, _log: list[dict[str, str]]
-) -> bool:
+def _cmd_gaps(_args: str, host: str, port: int, console: Console, _log: list[dict[str, str]]) -> bool:
     result = _safe_call_tool(console, "wiki.find_gaps", host=host, port=port)
     if result is None:
         return False
@@ -194,16 +172,12 @@ def _cmd_gaps(
     return False
 
 
-def _cmd_report_gap(
-    args: str, host: str, port: int, console: Console, _log: list[dict[str, str]]
-) -> bool:
+def _cmd_report_gap(args: str, host: str, port: int, console: Console, _log: list[dict[str, str]]) -> bool:
     query = args.strip()
     if not query:
         console.print("[red]usage[/red]: /report-gap <query>")
         return False
-    result = _safe_call_tool(
-        console, "wiki.report_gap", {"query": query}, host=host, port=port
-    )
+    result = _safe_call_tool(console, "wiki.report_gap", {"query": query}, host=host, port=port)
     if result is None:
         return False
     if isinstance(result, dict) and result.get("error"):
@@ -217,17 +191,13 @@ def _cmd_report_gap(
     return False
 
 
-def _cmd_ingest(
-    args: str, host: str, port: int, console: Console, _log: list[dict[str, str]]
-) -> bool:
+def _cmd_ingest(args: str, host: str, port: int, console: Console, _log: list[dict[str, str]]) -> bool:
     path = args.strip()
     if not path:
         console.print("[red]usage[/red]: /ingest <path>")
         return False
     with console.status("[dim]📂 ingesting...[/dim]", spinner="dots"):
-        result = _safe_call_tool(
-            console, "wiki.ingest", {"path": path}, host=host, port=port
-        )
+        result = _safe_call_tool(console, "wiki.ingest", {"path": path}, host=host, port=port)
     if result is None:
         return False
     if not isinstance(result, dict):
@@ -304,9 +274,7 @@ def run(host: str, port: int, console: Console) -> None:
         if messages_log:
             arguments["prior_messages"] = messages_log
         with console.status("[dim]🔍 thinking...[/dim]", spinner="dots"):
-            result = _safe_call_tool(
-                console, "wiki.ask", arguments, host=host, port=port
-            )
+            result = _safe_call_tool(console, "wiki.ask", arguments, host=host, port=port)
         if result is None:
             continue
         if not isinstance(result, dict):
@@ -346,9 +314,7 @@ def _dispatch_slash(
         cmd_name = full_key.split(maxsplit=1)[0]
         if name == cmd_name:
             return handler(args, host, port, console, messages_log)
-    console.print(
-        f"[red]unknown command[/red]: {escape(name)} — try /help for the list"
-    )
+    console.print(f"[red]unknown command[/red]: {escape(name)} — try /help for the list")
     return False
 
 

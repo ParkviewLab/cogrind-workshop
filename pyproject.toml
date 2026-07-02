@@ -22,6 +22,8 @@ cogrind-workshop = "cogrind_workshop.main:main"
 dev = [
     "pytest",
     "pytest-asyncio",
+    "ruff>=0.5",
+    "ty",
 ]
 
 [build-system]
@@ -51,3 +53,13 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["B011"]
+
+[tool.ty.src]
+include = ["src"]
+
+[tool.ty.environment]
+python-version = "3.13"
+
+[tool.ty.rules]
+# We can tighten these as the codebase matures.
+unresolved-import = "warn"
