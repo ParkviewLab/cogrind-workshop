@@ -22,7 +22,7 @@ The workflow runs three jobs: a **gate** (tag matches `pyproject.toml`; tag reac
 
 ### Commit message convention
 
-The changelog job categorizes commits using [Conventional Commits](https://www.conventionalcommits.org/) prefixes (see [`cliff.toml`](cliff.toml)):
+The changelog job categorizes commits using [Conventional Commits](https://www.conventionalcommits.org/) prefixes (the full list is in the ParkviewLab handbook's `commits-and-changelogs.md`):
 
 | Prefix | Section | Notes |
 |---|---|---|
