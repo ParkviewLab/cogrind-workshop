@@ -18,23 +18,27 @@ git push --follow-tags      # CI fires
 
 Don't have the helpers? Install once: `git clone https://github.com/ParkviewLab/dev-tools.git ~/dev-tools && cd ~/dev-tools && ./install.sh`.
 
-The workflow runs three jobs: a **gate** (tag matches `pyproject.toml`; tag reachable from `origin/main`) gates the **pypi** publish (wheel + sdist via trusted publishing — no Docker image, since this is a CLI client, not a server). After the publish, a **changelog** job generates the new `CHANGELOG.md` section (LLM-written "Highlights" paragraph + a [`git-cliff`](https://git-cliff.org/) categorized commit list), commits it back to `main`, and creates the GitHub Release with the same content as its body.
+The workflow runs three jobs: a **gate** (tag matches `pyproject.toml`; tag reachable from `origin/main`) gates the **pypi** publish (wheel + sdist via trusted publishing — no Docker image, since this is a CLI client, not a server). After the publish, a **changelog** job generates the new `CHANGELOG.md` section (LLM-written "Highlights" paragraph + a categorized list written by dev-tools' `generate-changelog`), commits it back to `main`, and creates the GitHub Release with the same content as its body.
 
 ### Commit message convention
 
 The changelog job categorizes commits using [Conventional Commits](https://www.conventionalcommits.org/) prefixes (the full list is in the ParkviewLab handbook's `commits-and-changelogs.md`):
 
-| Prefix | Section | Notes |
+| Title | Group in the notes | Notes |
 |---|---|---|
+| any type with `!` after it (`feat!:`), or a breaking-change footer | Breaking changes | listed there once, whatever its type |
 | `feat:` | Features | user-visible |
 | `fix:` | Bug fixes | user-visible |
 | `perf:` | Performance | user-visible |
 | `refactor:` | Refactor | |
 | `docs:` | Docs | |
 | `test:` | Tests | |
-| `chore:` / `ci:` / `build:` / `style:` | _(dropped)_ | not surfaced in CHANGELOG |
+| `revert:` | Reverts | GitHub's Revert button titles a PR `Revert "…"`, which has no type |
+| `build:` / `chore:` / `ci:` / `style:` | Maintenance | |
+| any other title | Other changes | the whole title |
+| a commit with no pull request | Direct commits | its subject and short hash |
 
-Squash-merge PRs use the PR title as the commit subject — so the **PR title** is what needs the prefix. Commits without a recognised prefix are silently dropped from the CHANGELOG (still in git history). The "Highlights" paragraph requires the `ANTHROPIC_API_KEY` org-level secret; if the LLM call fails, a placeholder lands and the release still ships.
+A title without a recognised type is not dropped: it is listed whole under Other changes. So prefix your PR titles, and correct a title before the merge, since retitling afterwards does not change the commit. The groups appear in the order above, and an empty group is left out.
 
 ## License
 
