@@ -34,5 +34,5 @@ jobs:
       - name: Type check
         run: uv run ty check          # ty must be a dev dependency
 
-      - name: Tests (excluding network + docling marker)
+      - name: Tests (excluding integration marker)
         run: uv run pytest -m "not integration" -q

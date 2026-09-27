@@ -9,22 +9,20 @@ history; slash commands for non-conversational operations inside the
 shell; bare-text turns go to `wiki.ask` and the cited answer
 pretty-prints.
 
-**First-cut scope (M5.5 first impl):**
+**Current scope:**
 
-- One-shot `wiki.ask` per turn — each question is independent. The
-  REPL does NOT yet feed prior turns to the LLM as conversation
-  context; that requires extending `wiki.ask`'s daemon-side surface
-  to accept a `messages` history (a future enhancement).
+- Multi-turn: each turn passes the session's prior turns to `wiki.ask`
+  as `prior_messages`; `/reset` clears the running log without ending
+  the session (see `run()` below).
 - No token streaming yet — the daemon's `wiki.ask` returns the full
   answer in one MCP tool result. A spinner shows during the call.
   Token streaming requires daemon-side protocol work (see the
   M2.5 "streaming response shape" deferred seam).
-- Slash commands: `/quit`, `/help`, `/clear`, `/history`,
-  `/status`, `/search <query>`, `/page <id>`, `/gaps`,
+- Slash commands: `/help`, `/quit`, `/exit`, `/clear`, `/history`,
+  `/reset`, `/status`, `/search <query>`, `/page <id>`, `/gaps`,
   `/report-gap <query>`, `/ingest <path>`.
 
 **Future enhancements** (separable PRs):
-- Multi-turn LLM context (extend `wiki.ask` to accept prior turns).
 - Token streaming (extend `wiki.ask` to use MCP `notifications/progress`).
 - Session save/restore via ConversationPages.
 - Voice in/out as a separate sibling project.
