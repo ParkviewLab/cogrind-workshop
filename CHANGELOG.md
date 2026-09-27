@@ -14,6 +14,22 @@ section here, and uses the same content as the GitHub Release body.
 
 ## [Unreleased]
 
+## [v0.1.1] - 2026-09-27
+
+### Highlights
+
+This release is mostly documentation and release-infrastructure work: the README and contributing guide are corrected to describe the CLI as it actually behaves — a single command driven by flags (`--ingest`, `--ask`, `--query`, `--status`, `--chat`) rather than subcommands, with no `--search` — and the in-code notes now reflect that the REPL carries prior turns and offers `/exit` and `/reset`. The release procedure is replaced by a link to the handbook's "Cutting a release", and the changelog description is updated for the shared generator, under which `chore:`, `ci:`, `build:` and `style:` entries appear under Maintenance and unrecognised titles under Other changes. The remaining changes rebuild the release and dev-release workflows from the handbook's parts, adding gate checks that reject tags carrying a dev marker or not greater than the previous release; publishing configuration is unchanged.
+
+### Docs
+
+- Correct the README, CONTRIBUTING and changelog header before the release (#6)
+
+### Maintenance
+
+- Drop the shallow re-fetch from the version guard (#3)
+- Assemble the release workflows from the handbook's parts (#4)
+- Generate the changelog with dev-tools' shared script (#5)
+
 ## [v0.1.0] - 2026-07-01
 
 ### Highlights
