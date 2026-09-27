@@ -22,9 +22,10 @@ Flag surface:
 - `cogrind-workshop --report-gap "..."` — record a knowledge gap (M4)
 - `cogrind-workshop --chat` — enter the interactive REPL (M5.5)
 
-The REPL is single-turn-per-LLM-call for now: each user input runs
-one `wiki.ask` round-trip. Multi-turn LLM context + token streaming
-land in follow-up PRs (see `repl.py` module docstring).
+The REPL maintains multi-turn context: each user input passes the
+session's prior turns to `wiki.ask` as `prior_messages` (see `repl.py`
+module docstring). Token streaming is not yet implemented; each turn
+waits for the daemon's full response.
 
 Default daemon location is `127.0.0.1:7474` — the same defaults
 cobalt-grinding ships with. Override with `--host` / `--port`. Future steps

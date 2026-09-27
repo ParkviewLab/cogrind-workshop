@@ -1,40 +1,38 @@
 # cogrind-workshop
 
-Human-facing MCP client for a running [`cobalt-grinding`](https://github.com/ParkviewLab/cobalt-grinding) daemon. One-shot subcommands (`ingest`, `ask`, `search`) and an interactive REPL (`chat`). Equivalent in role to Claude Desktop or Claude Code — just one MCP client among many; no privileged side-door into the cognitive system.
+Human-facing MCP client for a running [`cobalt-grinding`](https://github.com/ParkviewLab/cobalt-grinding) daemon. One-shot action flags (`--ingest`, `--ask`, `--query`, `--status`, …) and an interactive REPL (`--chat`). Equivalent in role to Claude Desktop or Claude Code — just one MCP client among many; no privileged side-door into the cognitive system.
 
 ## Status
 
-**Implemented.** One-shot flags (`--ingest`, `--ask`, `--search`, `--status`, …) and an interactive REPL (`--chat`, with slash commands) drive a running `cobalt-grinding` daemon over MCP. Originally **Track C of M2.7** in the CoGrind plan — see [`cobalt-grinding/docs/plan.md`](https://github.com/ParkviewLab/cobalt-grinding/blob/main/docs/plan.md) for the full design.
+**Implemented.** One-shot flags (`--ingest`, `--ask`, `--query`, `--status`, …) and an interactive REPL (`--chat`, with slash commands) drive a running `cobalt-grinding` daemon over MCP.
 
 ## Releasing
 
-Tag-driven via the release workflow on push of a `v*` tag. Use the [`ParkviewLab/dev-tools`](https://github.com/ParkviewLab/dev-tools) helpers — they enforce the SSOT-tag-CI loop (`pyproject.toml` is the only place the version lives; CI verifies the pushed tag matches before publishing).
-
-```sh
-git bump patch              # 0.1.5 → 0.1.6, committed
-git release                 # annotated tag v0.1.6 from pyproject.toml
-git push --follow-tags      # CI fires
-```
+Tag-driven via the release workflow on push of a `v*` tag. Use the [`ParkviewLab/dev-tools`](https://github.com/ParkviewLab/dev-tools) helpers — they enforce the SSOT-tag-CI loop (`pyproject.toml` is the only place the version lives; CI verifies the pushed tag matches before publishing). See the ParkviewLab handbook's [`releases.md`, "Cutting a release"](https://github.com/ParkviewLab/handbook/blob/main/docs/releases.md#cutting-a-release) for the procedure.
 
 Don't have the helpers? Install once: `git clone https://github.com/ParkviewLab/dev-tools.git ~/dev-tools && cd ~/dev-tools && ./install.sh`.
 
-The workflow runs three jobs: a **gate** (tag matches `pyproject.toml`; tag reachable from `origin/main`) gates the **pypi** publish (wheel + sdist via trusted publishing — no Docker image, since this is a CLI client, not a server). After the publish, a **changelog** job generates the new `CHANGELOG.md` section (LLM-written "Highlights" paragraph + a [`git-cliff`](https://git-cliff.org/) categorized commit list), commits it back to `main`, and creates the GitHub Release with the same content as its body.
+The workflow runs three jobs: a **gate** (the tag equals the `pyproject.toml` version, which carries no dev marker; the tagged commit is reachable from `origin/main`; the version is greater than the previous tag) gates the **pypi** publish (wheel + sdist via trusted publishing — no Docker image, since this is a CLI client, not a server). After the publish, a **changelog** job generates the new `CHANGELOG.md` section (LLM-written "Highlights" paragraph + a categorized list written by dev-tools' `generate-changelog`), commits it back to `main`, and creates the GitHub Release with the same content as its body.
 
 ### Commit message convention
 
-The changelog job categorizes commits using [Conventional Commits](https://www.conventionalcommits.org/) prefixes (see [`cliff.toml`](cliff.toml)):
+The changelog job groups each merged pull request by the [Conventional Commits](https://www.conventionalcommits.org/) type of its title (the full list is in the ParkviewLab handbook's `commits-and-changelogs.md`) and lists any commit that reached the release without one under Direct commits:
 
-| Prefix | Section | Notes |
+| Title | Group in the notes | Notes |
 |---|---|---|
+| any type with `!` after it (`feat!:`), or a breaking-change footer | Breaking changes | listed there once, whatever its type |
 | `feat:` | Features | user-visible |
 | `fix:` | Bug fixes | user-visible |
 | `perf:` | Performance | user-visible |
 | `refactor:` | Refactor | |
 | `docs:` | Docs | |
 | `test:` | Tests | |
-| `chore:` / `ci:` / `build:` / `style:` | _(dropped)_ | not surfaced in CHANGELOG |
+| `revert:` | Reverts | GitHub's Revert button titles a PR `Revert "…"`, which has no type |
+| `build:` / `chore:` / `ci:` / `style:` | Maintenance | |
+| any other title | Other changes | the whole title |
+| a commit with no pull request | Direct commits | its subject and short hash |
 
-Squash-merge PRs use the PR title as the commit subject — so the **PR title** is what needs the prefix. Commits without a recognised prefix are silently dropped from the CHANGELOG (still in git history). The "Highlights" paragraph requires the `ANTHROPIC_API_KEY` org-level secret; if the LLM call fails, a placeholder lands and the release still ships.
+A title without a recognised type is not dropped: it is listed whole under Other changes. So prefix your PR titles, and correct a title before the merge, since retitling afterwards does not change the commit. The groups appear in the order above, and an empty group is left out.
 
 ## License
 

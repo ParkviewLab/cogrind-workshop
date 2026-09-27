@@ -1,6 +1,6 @@
 [project]
 name = "cogrind-workshop"
-version = "0.1.0"
+version = "0.1.1.dev0"
 description = "Human-facing MCP client (CLI) for a running cobalt-grinding MCP server. Equivalent in role to Claude Desktop / Claude Code — one MCP client among many."
 readme = "README.md"
 requires-python = ">=3.13"
