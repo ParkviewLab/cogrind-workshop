@@ -8,7 +8,7 @@ license = "AGPL-3.0-or-later"
 license-files = ["LICENSE"]
 authors = [{ name = "Gary Frattarola", email = "garyf@parkviewlab.ai" }]
 dependencies = [
-    "mcp[cli]>=1.27.0",
+    "mcp[cli]>=1.27,<2",
     "click>=8.1",
     "rich>=13.7",
     "httpx",
