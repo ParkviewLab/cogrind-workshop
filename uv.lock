@@ -109,7 +109,7 @@ wheels = [
 
 [[package]]
 name = "cogrind-workshop"
-version = "0.1.2"
+version = "0.1.3.dev0"
 source = { editable = "." }
 dependencies = [
     { name = "click" },
@@ -131,7 +131,7 @@ dev = [
 requires-dist = [
     { name = "click", specifier = ">=8.1" },
     { name = "httpx" },
-    { name = "mcp", extras = ["cli"], specifier = ">=1.27.0" },
+    { name = "mcp", extras = ["cli"], specifier = ">=1.27,<2" },
     { name = "prompt-toolkit", specifier = ">=3.0" },
     { name = "rich", specifier = ">=13.7" },
 ]
