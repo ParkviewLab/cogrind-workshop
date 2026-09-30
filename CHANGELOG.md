@@ -14,6 +14,20 @@ section here, and uses the same content as the GitHub Release body.
 
 ## [Unreleased]
 
+## [v0.1.3] - 2026-09-30
+
+### Highlights
+
+This release pins `mcp[cli]` below 2.0, fixing a break in which a fresh install of the previous version resolved mcp 2.2.0 and every CLI command and REPL turn failed with `ValueError: not enough values to unpack (expected 3, got 2)` before connecting to the server. The remaining work is internal: CI now runs the standard fast test tier, and the agent pointer files and contributor docs were aligned with handbook v2.1.0.
+
+### Bug fixes
+
+- Keep mcp below 2 (#10)
+
+### Maintenance
+
+- Align with handbook v2.1.0 (#9)
+
 ## [v0.1.2] - 2026-09-27
 
 ### Highlights
